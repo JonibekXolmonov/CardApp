@@ -118,6 +118,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             unSavedCards.forEach {
+                appDatabase.cardDao().addCard(it)
+            }
+
+            unSavedCards.forEach {
                 service.addCard(it)
             }
 

@@ -6,7 +6,7 @@ import com.example.networkingexam.model.Card
 
 @Dao
 interface Dao {
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addCard(card: Card)
 
     @Query("SELECT * FROM cards")
