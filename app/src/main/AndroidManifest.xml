@@ -14,11 +14,12 @@
         android:theme="@style/Theme.NetworkingExam">
         <activity
             android:name=".AddCardActivity"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

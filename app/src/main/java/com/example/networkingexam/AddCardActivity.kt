@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.TextView
+import com.example.networkingexam.model.Card
 import com.google.android.material.button.MaterialButton
 
 class AddCardActivity : AppCompatActivity() {
@@ -46,18 +47,29 @@ class AddCardActivity : AppCompatActivity() {
         btnAdd = findViewById(R.id.btnAdd)
 
         btnAdd.setOnClickListener {
-            if (allFieldsAdded())
+            if (allFieldsAdded()) {
+                addCard(
+                    Card(
+                        1,
+                        edtNumber.text.toString().toLong(),
+                        edtHolder.text.toString(),
+                        "${edtDay.text}/${edtMonth.text}",
+                        edtCvv.text.toString().toInt(),
+                        false
+                    )
+                )
+            }
         }
 
     }
 
     private fun allFieldsAdded(): Boolean {
-        return edtNumber.text.isNotBlank()
+        return edtNumber.text.isNotBlank() && edtDay.text.isNotBlank() && edtMonth.text.isNotBlank() && edtCvv.text.isNotBlank() && edtHolder.text.isNotBlank()
     }
 
-    private fun addCard() {
+    private fun addCard(card: Card) {
         val intent = Intent()
-        intent.putExtra(Intent.EXTRA_TEXT, user.toString())
+        intent.putExtra("card", card)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

@@ -60,15 +60,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun addCard() {
-        val detailLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = it.data
+    val detailLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = it.data
+            val cardToAdd = data?.getParcelableExtra<Card>("card")
 
-            }
+            saveCard(cardToAdd!!)
         }
+    }
+
+    private fun saveCard(card: Card) {
+        if (isInternetAvailable()){
+            service.addCard(card).enqueue(object :Callback<Card>{
+                override fun onResponse(call: Call<Card>, response: Response<Card>) {
+
+                }
+
+                override fun onFailure(call: Call<Card>, t: Throwable) {
+
+                }
+
+            })
+        }
+    }
+
+    private fun addCard() {
+        val intent = Intent(this, AddCardActivity::class.java)
+        detailLauncher.launch(intent)
     }
 
     private fun refreshAdapter() {
