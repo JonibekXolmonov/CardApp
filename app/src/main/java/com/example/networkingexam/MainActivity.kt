@@ -108,6 +108,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCards() {
         if (isInternetAvailable()) {
+
+            val unSavedCards: ArrayList<Card> = ArrayList()
+            val savedCards = appDatabase.cardDao().getCards()
+            savedCards.forEach {
+                if (!it.isAvailable) {
+                    unSavedCards.add(it)
+                }
+            }
+
+            unSavedCards.forEach {
+                service.addCard(it)
+            }
+
             service.getCards().enqueue(object : Callback<List<Card>> {
                 override fun onResponse(call: Call<List<Card>>, response: Response<List<Card>>) {
                     cardAdapter.submitData(response.body()!!)
