@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "cards")
 data class Card(
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val cardNumber: Long,
     val cardHolder: String?,

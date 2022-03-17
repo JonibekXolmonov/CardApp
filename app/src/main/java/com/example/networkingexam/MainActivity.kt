@@ -6,10 +6,8 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.RecyclerView
 import com.example.networkingexam.adapter.CardAdapter
@@ -72,18 +70,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveCard(card: Card) {
-        if (isInternetAvailable()){
-            service.addCard(card).enqueue(object :Callback<Card>{
+        if (isInternetAvailable()) {
+            service.addCard(card).enqueue(object : Callback<Card> {
                 override fun onResponse(call: Call<Card>, response: Response<Card>) {
-
+                    card.isAvailable = true
+                    saveToDatabase(card)
+                    cardAdapter.addCard(response.body()!!)
+                    Toast.makeText(this@MainActivity, "Card saved", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onFailure(call: Call<Card>, t: Throwable) {
 
                 }
-
             })
+        } else {
+            card.isAvailable = false
+            saveToDatabase(card)
         }
+    }
+
+    private fun saveToDatabase(card: Card) {
+        appDatabase.cardDao().addCard(card)
     }
 
     private fun addCard() {
@@ -96,15 +103,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getCards() {
-        service.getCards().enqueue(object : Callback<List<Card>> {
-            override fun onResponse(call: Call<List<Card>>, response: Response<List<Card>>) {
-                cardAdapter.submitData(response.body()!!)
-            }
+        if (isInternetAvailable()) {
+            service.getCards().enqueue(object : Callback<List<Card>> {
+                override fun onResponse(call: Call<List<Card>>, response: Response<List<Card>>) {
+                    cardAdapter.submitData(response.body()!!)
+                }
 
-            override fun onFailure(call: Call<List<Card>>, t: Throwable) {
+                override fun onFailure(call: Call<List<Card>>, t: Throwable) {
 
-            }
-        })
+                }
+            })
+        } else {
+            cardAdapter.submitData(appDatabase.cardDao().getCards())
+        }
     }
 
     private fun isInternetAvailable(): Boolean {

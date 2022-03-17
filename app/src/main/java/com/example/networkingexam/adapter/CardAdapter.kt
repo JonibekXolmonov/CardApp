@@ -51,6 +51,11 @@ class CardAdapter : RecyclerView.Adapter<CardAdapter.CardVH>() {
         notifyDataSetChanged()
     }
 
+    fun addCard(card: Card){
+        this.cards.add(card)
+        notifyDataSetChanged()
+    }
+
     val String.creditCardFormatted: String
         get() {
             val preparedString = replace(" ", "").trim()
