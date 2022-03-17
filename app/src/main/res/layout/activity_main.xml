@@ -29,7 +29,7 @@
                     android:layout_weight="1"
                     android:text="Cards"
                     android:textColor="@color/white"
-                    android:textSize="30sp" />
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:id="@+id/ivAddCard"
@@ -51,7 +51,7 @@
         android:layout_height="match_parent"
         android:background="@color/backBlack"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="16dp"
         android:paddingTop="6dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

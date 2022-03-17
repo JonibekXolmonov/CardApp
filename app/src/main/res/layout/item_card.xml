@@ -17,10 +17,10 @@
 
 
             <ImageView
+                android:id="@+id/ivCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:background="@drawable/iv_back"
                 android:scaleType="centerCrop"
                 android:src="@drawable/card1" />
 

@@ -1,8 +1,11 @@
 package com.example.networkingexam
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.networkingexam.adapter.CardAdapter
 import com.example.networkingexam.model.Card
@@ -21,10 +24,14 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var service: Service
+    private lateinit var progressBar: ProgressBar
     private lateinit var rvCards:RecyclerView
     private lateinit var cardAdapter: CardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        window.statusBarColor = Color.parseColor("#393939")
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -54,7 +61,6 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<Card>>, t: Throwable) {
 
             }
-
         })
     }
 }
