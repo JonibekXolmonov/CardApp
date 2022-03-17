@@ -1,10 +1,13 @@
 package com.example.networkingexam
 
+import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.networkingexam.adapter.CardAdapter
@@ -24,8 +27,8 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var service: Service
-    private lateinit var progressBar: ProgressBar
-    private lateinit var rvCards:RecyclerView
+    private lateinit var ivAddCard: ImageView
+    private lateinit var rvCards: RecyclerView
     private lateinit var cardAdapter: CardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +45,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViews() {
         rvCards = findViewById(R.id.rvCards)
+        ivAddCard = findViewById(R.id.ivAddCard)
         cardAdapter = CardAdapter()
-
         getCards()
         refreshAdapter()
+
+        ivAddCard.setOnClickListener {
+            addCard()
+        }
+    }
+
+    private fun addCard() {
+        val intent = Intent(this,AddCardActivity::class.java)
+        startActivity(intent)
     }
 
     private fun refreshAdapter() {
@@ -53,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getCards() {
-        service.getCards().enqueue(object :Callback<List<Card>>{
+        service.getCards().enqueue(object : Callback<List<Card>> {
             override fun onResponse(call: Call<List<Card>>, response: Response<List<Card>>) {
                 cardAdapter.submitData(response.body()!!)
             }
@@ -62,5 +74,12 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        val manager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val infoMobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+        val infoWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        return infoMobile!!.isConnected || infoWifi!!.isConnected
     }
 }
