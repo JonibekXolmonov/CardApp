@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/User/AndroidStudioProjects/NetworkingExam/app/src/main/res/drawable-v24/ic_add.xml" value="0.14" />
         <entry key="..\:/Users/User/AndroidStudioProjects/NetworkingExam/app/src/main/res/drawable/iv_back.xml" value="0.14" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/NetworkingExam/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/NetworkingExam/app/src/main/res/layout/activity_add_card.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/NetworkingExam/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/User/AndroidStudioProjects/NetworkingExam/app/src/main/res/layout/item_card.xml" value="0.2892459826946848" />
       </map>
     </option>

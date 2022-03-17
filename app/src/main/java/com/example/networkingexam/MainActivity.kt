@@ -3,6 +3,8 @@ package com.example.networkingexam
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
+import com.example.networkingexam.adapter.CardAdapter
 import com.example.networkingexam.model.Card
 import com.example.networkingexam.networking.ApiClient
 import com.example.networkingexam.networking.service.Service
@@ -19,6 +21,8 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var service: Service
+    private lateinit var rvCards:RecyclerView
+    private lateinit var cardAdapter: CardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +30,25 @@ class MainActivity : AppCompatActivity() {
 
         service = ApiClient.createService(Service::class.java)
 
+        initViews()
+    }
+
+    private fun initViews() {
+        rvCards = findViewById(R.id.rvCards)
+        cardAdapter = CardAdapter()
+
         getCards()
+        refreshAdapter()
+    }
+
+    private fun refreshAdapter() {
+        rvCards.adapter = cardAdapter
     }
 
     private fun getCards() {
         service.getCards().enqueue(object :Callback<List<Card>>{
             override fun onResponse(call: Call<List<Card>>, response: Response<List<Card>>) {
-
+                cardAdapter.submitData(response.body()!!)
             }
 
             override fun onFailure(call: Call<List<Card>>, t: Throwable) {
