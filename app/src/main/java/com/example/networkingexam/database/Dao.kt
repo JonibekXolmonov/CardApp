@@ -11,4 +11,7 @@ interface Dao {
 
     @Query("SELECT * FROM cards")
     fun getCards(): List<Card>
+
+    @Query("DELETE FROM cards")
+    fun delete()
 }

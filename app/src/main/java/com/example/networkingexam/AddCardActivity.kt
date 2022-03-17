@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import com.example.networkingexam.model.Card
@@ -50,12 +51,11 @@ class AddCardActivity : AppCompatActivity() {
             if (allFieldsAdded()) {
                 addCard(
                     Card(
-                        1,
-                        edtNumber.text.toString().toLong(),
-                        edtHolder.text.toString(),
-                        "${edtDay.text}/${edtMonth.text}",
-                        edtCvv.text.toString().toInt(),
-                        false
+                        cardNumber = edtNumber.text.toString().toLong(),
+                        cardHolder = edtHolder.text.toString(),
+                        expireDate = "${edtDay.text}/${edtMonth.text}",
+                        cvv = edtCvv.text.toString().toInt(),
+                        isAvailable = false
                     )
                 )
             }
@@ -68,6 +68,7 @@ class AddCardActivity : AppCompatActivity() {
     }
 
     private fun addCard(card: Card) {
+        Log.d("TAG", "addCard: $card")
         val intent = Intent()
         intent.putExtra("card", card)
         setResult(Activity.RESULT_OK, intent)

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -63,9 +64,9 @@ class MainActivity : AppCompatActivity() {
     ) {
         if (it.resultCode == Activity.RESULT_OK) {
             val data: Intent? = it.data
-            val cardToAdd = data?.getParcelableExtra<Card>("card")
-
-            saveCard(cardToAdd!!)
+            val cardToAdd = data?.getSerializableExtra("card")
+            Log.d("TAG", "details: $cardToAdd")
+            saveCard(cardToAdd as Card)
         }
     }
 
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             service.addCard(card).enqueue(object : Callback<Card> {
                 override fun onResponse(call: Call<Card>, response: Response<Card>) {
                     card.isAvailable = true
+                    card.id = null
                     saveToDatabase(card)
                     cardAdapter.addCard(response.body()!!)
                     Toast.makeText(this@MainActivity, "Card saved", Toast.LENGTH_SHORT).show()
@@ -85,7 +87,9 @@ class MainActivity : AppCompatActivity() {
             })
         } else {
             card.isAvailable = false
+            card.id = null
             saveToDatabase(card)
+            cardAdapter.addCard(card)
         }
     }
 
@@ -110,7 +114,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<List<Card>>, t: Throwable) {
-
                 }
             })
         } else {
