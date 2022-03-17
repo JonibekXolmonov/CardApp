@@ -118,6 +118,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             unSavedCards.forEach {
+                it.isAvailable = true
                 appDatabase.cardDao().addCard(it)
             }
 
