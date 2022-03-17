@@ -117,13 +117,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            Log.d("TAG", "getCards: $unSavedCards")
+
             unSavedCards.forEach {
                 it.isAvailable = true
                 appDatabase.cardDao().addCard(it)
             }
 
             unSavedCards.forEach {
-                service.addCard(it)
+                service.addCard(it).request()
             }
 
             service.getCards().enqueue(object : Callback<List<Card>> {
