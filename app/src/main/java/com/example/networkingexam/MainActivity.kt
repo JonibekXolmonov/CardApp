@@ -1,5 +1,6 @@
 package com.example.networkingexam
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -9,8 +10,10 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.RecyclerView
 import com.example.networkingexam.adapter.CardAdapter
+import com.example.networkingexam.database.AppDatabase
 import com.example.networkingexam.model.Card
 import com.example.networkingexam.networking.ApiClient
 import com.example.networkingexam.networking.service.Service
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ivAddCard: ImageView
     private lateinit var rvCards: RecyclerView
     private lateinit var cardAdapter: CardAdapter
+    private lateinit var appDatabase: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -39,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         service = ApiClient.createService(Service::class.java)
+        appDatabase = AppDatabase.getInstance(this)
 
         initViews()
     }
@@ -56,8 +61,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addCard() {
-        val intent = Intent(this,AddCardActivity::class.java)
-        startActivity(intent)
+        val detailLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = it.data
+
+            }
+        }
     }
 
     private fun refreshAdapter() {

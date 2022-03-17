@@ -14,7 +14,8 @@
         android:theme="@style/Theme.NetworkingExam">
         <activity
             android:name=".AddCardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
