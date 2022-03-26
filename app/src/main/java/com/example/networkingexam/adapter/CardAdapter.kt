@@ -47,12 +47,8 @@ class CardAdapter : RecyclerView.Adapter<CardAdapter.CardVH>() {
     override fun getItemCount(): Int = cards.size
 
     fun submitData(cards: List<Card>) {
+        this.cards.clear()
         this.cards.addAll(cards)
-        notifyDataSetChanged()
-    }
-
-    fun addCard(card: Card){
-        this.cards.add(card)
         notifyDataSetChanged()
     }
 

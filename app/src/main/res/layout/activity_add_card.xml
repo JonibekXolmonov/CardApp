@@ -94,8 +94,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
                         android:layout_marginBottom="20dp"
+                        android:maxLength="19"
                         android:textAlignment="center"
-                        android:textColor="@color/white"
+                        android:textColor="@color/lightWhite"
                         android:textSize="26sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -115,6 +116,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
+                            android:maxLength="20"
+                            android:singleLine="true"
                             android:text="CARD HOLDER"
                             android:textColor="@color/white" />
 
@@ -124,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:layout_marginTop="2dp"
-                            android:textColor="@color/white"
+                            android:textColor="@color/lightWhite"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -151,7 +154,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:layout_marginTop="2dp"
-                            android:textColor="@color/white"
+                            android:maxLength="5"
+                            android:textColor="@color/lightWhite"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -178,7 +182,9 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/edt_background"
             android:inputType="number"
+            android:maxLength="16"
             android:padding="8dp"
+            android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -214,6 +220,7 @@
                         android:background="@drawable/edt_background"
                         android:hint="dd"
                         android:inputType="number"
+                        android:maxLength="2"
                         android:padding="8dp"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -229,6 +236,7 @@
                         android:background="@drawable/edt_background"
                         android:hint="mm"
                         android:inputType="number"
+                        android:maxLength="2"
                         android:padding="8dp"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -264,6 +272,7 @@
                         android:background="@drawable/edt_background"
                         android:hint="cvv"
                         android:inputType="number"
+                        android:maxLength="3"
                         android:padding="8dp"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -290,7 +299,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:background="@drawable/edt_background"
+            android:inputType="text"
+            android:maxLength="20"
             android:padding="8dp"
+            android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -303,6 +315,7 @@
             android:paddingVertical="10dp"
             android:text="Add New Card"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textStyle="bold"
             app:backgroundTint="#F01626"
             app:cornerRadius="10dp" />

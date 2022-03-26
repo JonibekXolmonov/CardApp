@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         service = ApiClient.createService(Service::class.java)
         appDatabase = AppDatabase.getInstance(this)
 
+        //appDatabase.cardDao().delete()
         initViews()
     }
 
@@ -51,94 +52,72 @@ class MainActivity : AppCompatActivity() {
         rvCards = findViewById(R.id.rvCards)
         ivAddCard = findViewById(R.id.ivAddCard)
         cardAdapter = CardAdapter()
-        getCards()
-        refreshAdapter()
 
         ivAddCard.setOnClickListener {
-            addCard()
+            startCardAddActivity()
+        }
+
+        //we use database data to show in ui cause it is much faster
+        getCardsFromDatabase()
+
+        //this function saves cards to server whose isAvailable is false
+        if (isInternetAvailable()) {
+            saveCardsToServer()
         }
     }
 
-    val detailLauncher = registerForActivityResult(
+    private fun saveCardsToServer() {
+        val cards = appDatabase.cardDao().getCardsToSaveToServer()
+        if (cards.isNotEmpty())
+            savaToServer(0, cards)
+    }
+
+    private fun savaToServer(index: Int, cards: List<Card>) {
+        var indexOfCard = index
+        val card = cards[indexOfCard]
+        card.isAvailable = true
+        service.addCard(card).enqueue(object : Callback<Card> {
+            override fun onResponse(call: Call<Card>, response: Response<Card>) {
+                Log.d("TAG", "onResponse: ${response.body()}")
+                updateInDatabase(card)
+
+                indexOfCard++
+                if (indexOfCard < cards.size) {
+                    savaToServer(indexOfCard, cards)
+                }
+            }
+
+            override fun onFailure(call: Call<Card>, t: Throwable) {
+
+            }
+        })
+    }
+
+    private val detailLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == Activity.RESULT_OK) {
-            val data: Intent? = it.data
-            val cardToAdd = data?.getSerializableExtra("card")
-            Log.d("TAG", "details: $cardToAdd")
-            saveCard(cardToAdd as Card)
+            getCardsFromDatabase()
         }
     }
 
-    private fun saveCard(card: Card) {
-        if (isInternetAvailable()) {
-            service.addCard(card).enqueue(object : Callback<Card> {
-                override fun onResponse(call: Call<Card>, response: Response<Card>) {
-                    card.isAvailable = true
-                    card.id = null
-                    saveToDatabase(card)
-                    cardAdapter.addCard(response.body()!!)
-                    Toast.makeText(this@MainActivity, "Card saved", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onFailure(call: Call<Card>, t: Throwable) {
-
-                }
-            })
-        } else {
-            card.isAvailable = false
-            card.id = null
-            saveToDatabase(card)
-            cardAdapter.addCard(card)
-        }
+    private fun getCardsFromDatabase() {
+        val cardsInDatabase = appDatabase.cardDao().getCards()
+        refreshAdapter(cardsInDatabase)
     }
 
-    private fun saveToDatabase(card: Card) {
+    private fun updateInDatabase(card: Card) {
         appDatabase.cardDao().addCard(card)
     }
 
-    private fun addCard() {
+    private fun startCardAddActivity() {
         val intent = Intent(this, AddCardActivity::class.java)
         detailLauncher.launch(intent)
     }
 
-    private fun refreshAdapter() {
+    private fun refreshAdapter(cards: List<Card>) {
+        cardAdapter.submitData(cards)
         rvCards.adapter = cardAdapter
-    }
-
-    private fun getCards() {
-        if (isInternetAvailable()) {
-
-            val unSavedCards: ArrayList<Card> = ArrayList()
-            val savedCards = appDatabase.cardDao().getCards()
-            savedCards.forEach {
-                if (!it.isAvailable) {
-                    unSavedCards.add(it)
-                }
-            }
-
-            Log.d("TAG", "getCards: $unSavedCards")
-
-            unSavedCards.forEach {
-                it.isAvailable = true
-                appDatabase.cardDao().addCard(it)
-            }
-
-            unSavedCards.forEach {
-                service.addCard(it).request()
-            }
-
-            service.getCards().enqueue(object : Callback<List<Card>> {
-                override fun onResponse(call: Call<List<Card>>, response: Response<List<Card>>) {
-                    cardAdapter.submitData(response.body()!!)
-                }
-
-                override fun onFailure(call: Call<List<Card>>, t: Throwable) {
-                }
-            })
-        } else {
-            cardAdapter.submitData(appDatabase.cardDao().getCards())
-        }
     }
 
     private fun isInternetAvailable(): Boolean {

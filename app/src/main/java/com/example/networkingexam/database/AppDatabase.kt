@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.networkingexam.model.Card
 
-@Database(entities = [Card::class], version = 4)
+@Database(entities = [Card::class], version = 6)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun cardDao(): Dao

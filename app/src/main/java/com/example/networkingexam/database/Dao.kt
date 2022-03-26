@@ -14,4 +14,7 @@ interface Dao {
 
     @Query("DELETE FROM cards")
     fun delete()
+
+    @Query("SELECT * FROM cards WHERE isAvailable=0")
+    fun getCardsToSaveToServer(): List<Card>
 }
